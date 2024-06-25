@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+
+    <title>Face Recognition Based Attendance System</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: "Ubuntu", sans-serif;
+        }
+        .navbar-custom {
+            background-color: #3f51b5; /* Change the background color */
+        }
+
+        .navbar-custom .navbar-brand,
+        .navbar-custom .navbar-nav .nav-link {
+            color: #ffffff; /* Change the text color */
+        }
+
+        .navbar-custom .navbar-toggler-icon {
+            background-color: #ffffff; /* Change the color of the toggler icon */
+        }
+
+        .navbar-custom .nav-link.active {
+            color: #ffc107 !important; /* Change the color of the active link */
+        }
+        body {
+            background-image: url('https://i.makeagif.com/media/9-14-2021/3XxbIh.gif');
+            background-size: cover;
+            font-family: sans-serif;
+            margin-top: 40px;
+            height: 100vh;
+            padding: 0;
+            margin: 0;
+        }
+
+        table {
+            border: 1px;
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 86%;
+            margin: auto;
+        }
+
+        td,
+        th {
+            border: 1px solid black !important;
+            padding: 5px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+        .navbar-brand {
+            font-family: "Lugrasimo", cursive;
+}
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgba(51, 77, 248, 0.914);">
+
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">AttendEase</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/start">Take Attendance</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="/roll-call">Take Roll Call</a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="/listusers">View All Students</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+   
+
+    {% if mess %}
+    <p class="text-center" style="color: red;font-size: 20px;">{{ mess }}</p>
+    {% endif %}
+
+    <div class="row text-center" style="padding: 20px;margin: 20px;">
+
+        <div class="col"
+            style="border-radius: 20px;padding: 0px;background-color:rgb(211,211,211,0.5);margin:0px 10px 10px 10px;min-height: 400px;">
+            <h2 style="border-radius: 20px 20px 0px 0px;background-color: #0b4c61;color: white;padding: 10px;">Today's
+                Attendance <i class="material-icons">assignment</i></h2>
+            <a style="text-decoration: none;max-width: 300px;" href="/start">
+                <button
+                    style="font-size: 24px;font-weight: bold;border-radius: 10px;width:490px;padding: 10px;margin-top: 30px;margin-bottom: 30px;"
+                    type='submit' class='btn btn-primary'>Take Attendance <i
+                        class="material-icons">beenhere</i></button>
+            </a>
+            <table style="background-color: white;">
+                <tr>
+                    <td><b>Sr.No</b></td>
+                    <td><b>Name</b></td>
+                    <td><b>ID</b></td>
+                    <td><b>Time</b></td>
+                </tr>
+                {% if l %}
+                {% for i in range(l) %}
+                <tr>
+                    <td>{{ i+1 }}</td>
+                    <td>{{ names[i] }}</td>
+                    <td>{{ rolls[i] }}</td>
+                    <td>{{ times[i] }}</td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+
+        <div class="col"
+            style="border-radius: 20px;padding: 0px;background-color:rgb(211,211,211,0.5);margin:0px 10px 10px 10px;height: 400px;">
+            <form action='/add' method="POST" enctype="multipart/form-data">
+                <h2 style="border-radius: 20px 20px 0px 0px;background-color: #0b4c61;color: white;padding: 10px;">Add
+                    New User <i class="material-icons">control_point_duplicate</i></h2>
+                <label style="font-size: 20px;"><b>Enter New User Name*</b></label>
+                <br>
+                <input type="text" id="newusername" name='newusername'
+                    style="font-size: 20px;margin-top:10px;margin-bottom:10px;" required>
+                <br>
+                <label style="font-size: 20px;"><b>Enter New User Id*</b></label>
+                <br>
+                <input type="number" id="newusereid" name='newuserid'
+                    style="font-size: 20px;margin-top:10px;margin-bottom:10px;" required>
+                <br>
+                <button style="width: 232px;margin-top: 20px;font-size: 20px;" type='submit' class='btn btn-dark'>Add
+                    New User
+                </button>
+                <br>
+                
+            </form>
+        </div>
+<!-- New button for taking roll call -->
+<!-- <div class="text-center mt-5">
+    <a href="/roll-call">
+        <button style="font-size: 24px;font-weight: bold;border-radius: 10px;width:490px;padding: 10px;"
+            class="btn btn-primary">Take Roll Call <i class="material-icons">list_alt</i></button>
+    </a>
+</div> -->
+<div class="text-center mt-5">
+    <a href="/listusers">
+        <button style="font-size: 24px;font-weight: bold;border-radius: 10px;width:490px;padding: 10px;margin-bottom: 50px;"
+            class="btn btn-primary">View All Students <i class="material-icons">list_alt</i></button>
+    </a>
+</div>
+
+
+    </div>
+</body>
+
+</html>
